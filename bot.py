@@ -2,6 +2,7 @@ import logging
 import time
 from io import BytesIO
 import textwrap as tw
+import os
 
 import telebot
 from environs import Env
