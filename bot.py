@@ -10,8 +10,6 @@ from parser import parse_latest_news_url, parse_news_page
 from data_processing import shorten_text
 
 
-DB_FILENAME = 'db.txt'
-
 logger = logging.getLogger('TeleBot')
 
 
@@ -22,6 +20,7 @@ def main():
     channel_id = env.int("CHANNEL_ID")
 
     db_filename = env.str('DB_FILENAME')
+    db_path = os.path.join(db_filename)
 
     logger.setLevel(logging.INFO)
     logger.info('Commence logging.')
@@ -30,14 +29,14 @@ def main():
 
     while True:
         latest_news_url = parse_latest_news_url()
-        with open(DB_FILENAME, 'r', encoding='utf-8') as file:
+        with open(db_path, 'r', encoding='utf-8') as file:
             old_urls = file.readlines()
         if latest_news_url + '\n' not in old_urls:
             title, img_url, text = parse_news_page(latest_news_url)
             shortened_text = shorten_text(text)
             print(shortened_text)
             post_news(bot, channel_id, title, img_url, shortened_text)
-            with open(DB_FILENAME, 'a+', encoding='utf-8') as file:
+            with open(db_path, 'a+', encoding='utf-8') as file:
                 file.write(latest_news_url + '\n')
         else:
             time.sleep(60)
