@@ -19,6 +19,7 @@ def main():
     env.read_env()
     api_token = env.str("TG_BOT_TOKEN")
     channel_id = env.int("CHANNEL_ID")
+    gpt_token = env.str('GPT_KEY')
 
     db_filename = env.str('DB_FILENAME')
     db_path = os.path.join(db_filename)
@@ -34,8 +35,7 @@ def main():
             old_urls = file.readlines()
         if latest_news_url + '\n' not in old_urls:
             title, img_url, text = parse_news_page(latest_news_url)
-            shortened_text = shorten_text(text)
-            print(shortened_text)
+            shortened_text = shorten_text(gpt_token, text)
             post_news(bot, channel_id, title, img_url, shortened_text)
             with open(db_path, 'a+', encoding='utf-8') as file:
                 file.write(latest_news_url + '\n')
