@@ -30,7 +30,7 @@ def main():
 
     while True:
         latest_news_url = parse_latest_news_url()
-        with open(db_path, 'r', encoding='utf-8') as file:
+        with open(db_path, 'r+', encoding='utf-8') as file:
             old_urls = file.readlines()
         if latest_news_url + '\n' not in old_urls:
             title, img_url, text = parse_news_page(latest_news_url)
