@@ -1,19 +1,15 @@
-import freeGPT
+import os
 import asyncio
-
-
-async def _send_prompt(prompt: str):
-    response = await getattr(freeGPT, "gpt3").Completion().create(prompt)
-    return response
+import openai
 
 
 def shorten_text(text: str, symbols_count: int = 600):
     prompt = f'''
-    Перескажи нижеследующий текст, сократив до {symbols_count} символов. Текст составь на русском языке.
+    Перескажи нижеследующий текст, сократив до {symbols_count} символов.
 
     {text}
     '''
-    print(prompt)
-    loop = asyncio.get_event_loop()
-    result = loop.run_until_complete(_send_prompt(prompt))
-    return result
+    openai.api_key = os.getenv('GPT_KEY')
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo-16k",
+                                              messages=[{"role": "assistant", "content": prompt}])
+    return completion.choices[0].message.content
