@@ -78,10 +78,10 @@ def main():
             logging.error(err_msg)
             rollbar.report_message(err_msg, 'error', response)
             continue
-        # except Exception as ex:
-        #     logging.error(ex)
-        #     rollbar.report_exc_info()
-        #     continue
+        except Exception as ex:
+            logging.error(ex)
+            rollbar.report_exc_info()
+            continue
 
         finally:
             try:
