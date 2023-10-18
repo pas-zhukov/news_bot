@@ -4,7 +4,9 @@ from io import BytesIO
 import textwrap as tw
 import os
 
+import git
 import requests
+import rollbar
 import telebot
 from environs import Env
 
@@ -28,31 +30,65 @@ def main():
     logger.setLevel(logging.INFO)
     logger.info('Commence logging.')
 
+    repo = git.Repo(search_parent_directories=True)
+    sha = repo.head.object.hexsha
+    rollbar.init(env.str('ROLLBAR_ACCESS_TOKEN', None),
+                 env.str('ROLLBAR_ENV', None),
+                 code_version=sha)
+    rollbar.report_message('Rollbar is configured correctly', 'info')
+
     bot = telebot.TeleBot(api_token)
 
     while True:
-        latest_news_url = parse_latest_news_url()
+        time.sleep(20)
+        try:
+            latest_news_url = parse_latest_news_url()
+        except Exception as ex:
+            logging.error(ex)
+            rollbar.report_exc_info()
+            continue
         with open(db_path, 'r+', encoding='utf-8') as file:
             old_urls = file.readlines()
         if latest_news_url + '\n' not in old_urls:
-            title, img_url, text = parse_news_page(latest_news_url)
-            shortened_text = shorten_text(gpt_token, text)
+            try:
+                title, img_url, text = parse_news_page(latest_news_url)
+            except Exception as ex:
+                logging.error(ex)
+                rollbar.report_exc_info()
+                continue
+            try:
+                shortened_text = shorten_text(gpt_token, text)
+            except Exception as ex:
+                logging.error(ex)
+                rollbar.report_exc_info()
+                continue
 
             #  loading image
             try:
                 response = requests.get(img_url, verify=False)
                 response.raise_for_status()
             except requests.HTTPError:
-                logging.error(f'Unable to download image! News_title: {title} Img source: {img_url}')
+                err_msg = f'Unable to download image! News_title: {title} Img source: {img_url}'
+                logging.error(err_msg)
+                rollbar.report_message(err_msg, 'error', response)
+                continue
+            except Exception as ex:
+                logging.error(ex)
+                rollbar.report_exc_info()
                 continue
             image = BytesIO(response.content)
             unified_img = unify_image(image, 'perpetua', 1000, True)
 
-            post_news(bot, channel_id, title, unified_img, shortened_text)
+            try:
+                post_news(bot, channel_id, title, unified_img, shortened_text)
+            except Exception as ex:
+                logging.error(ex)
+                rollbar.report_exc_info()
+                continue
             with open(db_path, 'a+', encoding='utf-8') as file:
                 file.write(latest_news_url + '\n')
         else:
-            time.sleep(40)
+            time.sleep(20)
 
 
 def post_news(bot: telebot.TeleBot,

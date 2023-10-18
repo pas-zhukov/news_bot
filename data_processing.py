@@ -6,7 +6,7 @@ import pilgram
 import openai
 
 
-def shorten_text(api_token: str, text: str, symbols_count: int = 800, model: str = 'gpt-3.5-turbo-16k'):
+def shorten_text(api_token: str, text: str, symbols_count: int = 600, model: str = 'gpt-3.5-turbo-16k'):
     prompt = f'''
     Перескажи нижеследующий текст, сократив до {symbols_count} символов. Пусть текст будет немного большей длины, главное не упустить важные детали.
 
