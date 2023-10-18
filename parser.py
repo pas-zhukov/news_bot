@@ -49,6 +49,7 @@ def parse_news_page(url: str):
     title = soup.select_one(title_selector).get_text().strip()
 
     image_url = soup.select_one(main_image_selector).get('src')
+    image_url = urljoin(SITE_BASE_URL, image_url)
 
     paragraphs = soup.select(paragraphs_selector)
     paragraphs_clear = []

@@ -4,11 +4,12 @@ from io import BytesIO
 import textwrap as tw
 import os
 
+import requests
 import telebot
 from environs import Env
 
 from parser import parse_latest_news_url, parse_news_page
-from data_processing import shorten_text
+from data_processing import shorten_text, unify_image
 
 
 logger = logging.getLogger('TeleBot')
@@ -36,11 +37,22 @@ def main():
         if latest_news_url + '\n' not in old_urls:
             title, img_url, text = parse_news_page(latest_news_url)
             shortened_text = shorten_text(gpt_token, text)
-            post_news(bot, channel_id, title, img_url, shortened_text)
+
+            #  loading image
+            try:
+                response = requests.get(img_url, verify=False)
+                response.raise_for_status()
+            except requests.HTTPError:
+                logging.error(f'Unable to download image! News_title: {title} Img source: {img_url}')
+                continue
+            image = BytesIO(response.content)
+            unified_img = unify_image(image, 'perpetua', 1000, True)
+
+            post_news(bot, channel_id, title, unified_img, shortened_text)
             with open(db_path, 'a+', encoding='utf-8') as file:
                 file.write(latest_news_url + '\n')
         else:
-            time.sleep(60)
+            time.sleep(40)
 
 
 def post_news(bot: telebot.TeleBot,
