@@ -21,7 +21,7 @@ def shorten_text(api_token: str, text: str, symbols_count: int = 600, model: str
 def unify_image(input_image: BytesIO,
                 _filter: str = '__original__',
                 pixels_num: int = 100,
-                horizontal_flip: bool = True):
+                horizontal_flip: bool = False) -> bytes:
     """
     Unify image using pixels replacement and instagram filters.
 
@@ -35,7 +35,7 @@ def unify_image(input_image: BytesIO,
         horizontal_flip(bool): Defines if horizontal flip must be applied.
 
     Returns:
-        BytesIO: Unified image as bytes.
+        bytes: Unified image as bytes.
 
     """
     image = Image.open(input_image)
