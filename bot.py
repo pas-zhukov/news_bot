@@ -34,8 +34,9 @@ def main():
     logger.setLevel(logging.INFO)
     logger.info('Commence logging.')
 
-    repo = git.Repo(search_parent_directories=True)
-    sha = repo.head.object.hexsha
+    # repo = git.Repo(search_parent_directories=True)
+    # sha = repo.head.object.hexsha
+    sha = 1.0
     rollbar.init(env.str('ROLLBAR_ACCESS_TOKEN', None),
                  env.str('ROLLBAR_ENV', None),
                  code_version=sha)
