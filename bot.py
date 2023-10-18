@@ -3,6 +3,7 @@ import time
 from io import BytesIO
 import textwrap as tw
 import os
+from pathlib import Path
 
 # import git
 import requests
@@ -30,6 +31,8 @@ def main():
 
     db_filename = env.str('DB_FILENAME')
     db_path = os.path.join(db_filename)
+    file_path = Path(db_path)
+    file_path.touch(exist_ok=True)
 
     logger.setLevel(logging.INFO)
     logger.info('Commence logging.')
