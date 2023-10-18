@@ -4,7 +4,7 @@ from io import BytesIO
 import textwrap as tw
 import os
 
-import git
+# import git
 import requests
 import rollbar
 import telebot
