@@ -17,6 +17,5 @@ RUN apt-get update \
     && apt-get install -y wget \
     && rm -rf /var/lib/apt/lists/*
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg-reconfigure debconf -f noninteractive -p critical
-RUN dpkg -i google-chrome-stable_current_amd64.deb
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ./google-chrome-stable_current_amd64.deb
 COPY . .
