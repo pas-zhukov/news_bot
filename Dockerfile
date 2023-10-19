@@ -13,6 +13,9 @@ COPY requirements.txt ./
 RUN apt update
 RUN DEBIAN_FRONTEND=noninteractive apt-get -yq install python3 python3-pip python3-dev python3-virtualenv
 RUN pip install -r requirements.txt
+RUN apt-get update \
+    && apt-get install -y wget \
+    && rm -rf /var/lib/apt/lists/*
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN dpkg -i google-chrome-stable_current_amd64.deb
 COPY . .
