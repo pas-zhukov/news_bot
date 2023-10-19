@@ -1,4 +1,4 @@
-FROM ubuntu:22.04-latest as base
+FROM ubuntu:22.04 as base
 LABEL authors="pas-zhukov"
 # This flag is important to output python logs correctly in docker!
 ENV PYTHONUNBUFFERED 1
