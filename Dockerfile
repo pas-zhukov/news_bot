@@ -38,7 +38,8 @@ RUN apt-get install -y \
     libvulkan1 \
     libcurl4
 RUN apt-get install -y wget \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+RUN apt-get install -y git
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ./google-chrome-stable_current_amd64.deb
 COPY . .
