@@ -4,6 +4,7 @@ from io import BytesIO
 import textwrap as tw
 import os
 from pathlib import Path
+import random
 
 import requests
 import rollbar
@@ -14,6 +15,13 @@ from parser import parse_latest_news_url, parse_news_page
 from data_processing import shorten_text, unify_image, rephrase_title
 from vk import create_post_on_wall
 
+
+FILTERS_LIST = [
+    'aden', 'brooklyn', 'clarendon',
+    'lark', 'lofi', 'maven',
+    'nashville', 'perpetua', 'slumber',
+    'valencia',
+]
 
 logger = logging.getLogger('TeleBot')
 
@@ -60,7 +68,7 @@ def main():
                 response.raise_for_status()
 
                 image = BytesIO(response.content)
-                unified_img = unify_image(image, 'perpetua', 100, True)
+                unified_img = unify_image(image, random.choice(FILTERS_LIST), 100, True)
 
                 post_news(bot, channel_id, rephrased_title, unified_img, shortened_text)
 
