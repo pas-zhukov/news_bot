@@ -12,7 +12,7 @@ import telebot
 from environs import Env
 
 from parser import parse_latest_news_url, parse_news_page
-from data_processing import shorten_text, unify_image, rephrase_title
+from data_processing import shorten_text, make_img_unique, rephrase_title
 from vk import create_post_on_wall
 
 
@@ -68,12 +68,12 @@ def main():
                 response.raise_for_status()
 
                 image = BytesIO(response.content)
-                unified_img = unify_image(image, random.choice(FILTERS_LIST), 100, True)
+                unique_img = make_img_unique(image, random.choice(FILTERS_LIST), 100, True)
 
-                post_news(bot, channel_id, rephrased_title, unified_img, shortened_text)
+                post_news(bot, channel_id, rephrased_title, unique_img, shortened_text)
 
                 with open(image_path, 'bw+') as file:
-                    file.write(unified_img)
+                    file.write(unique_img)
                 create_post_on_wall(image_path, title, shortened_text, vk_access_token, vk_group_id)
 
                 with open(db_path, 'a+', encoding='utf-8') as file:

@@ -26,12 +26,12 @@ def rephrase_title(api_token: str, title: str, model: str = 'gpt-3.5-turbo'):
     return completion.choices[0].message.content
 
 
-def unify_image(input_image: BytesIO,
-                _filter: str = '__original__',
-                pixels_num: int = 100,
-                horizontal_flip: bool = False) -> bytes:
+def make_img_unique(input_image: BytesIO,
+                    _filter: str = '__original__',
+                    pixels_num: int = 100,
+                    horizontal_flip: bool = False) -> bytes:
     """
-    Unify image using pixels replacement and instagram filters.
+    Make image unique using pixels replacement and instagram filters.
 
     Pixel replacement code source:
     https://www.geeksforgeeks.org/how-to-manipulate-the-pixel-values-of-an-image-using-python/
