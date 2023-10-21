@@ -11,7 +11,7 @@ import telebot
 from environs import Env
 
 from parser import parse_latest_news_url, parse_news_page
-from data_processing import shorten_text, unify_image
+from data_processing import shorten_text, unify_image, rephrase_title
 from vk import create_post_on_wall
 
 
@@ -53,6 +53,7 @@ def main():
                 title, img_url, text = parse_news_page(latest_news_url)
 
                 shortened_text = shorten_text(gpt_token, text)
+                rephrased_title = rephrase_title(gpt_token, title)
 
                 # loading image
                 response = requests.get(img_url, verify=False)
@@ -61,7 +62,7 @@ def main():
                 image = BytesIO(response.content)
                 unified_img = unify_image(image, 'perpetua', 100, True)
 
-                post_news(bot, channel_id, title, unified_img, shortened_text)
+                post_news(bot, channel_id, rephrased_title, unified_img, shortened_text)
 
                 with open(image_path, 'bw+') as file:
                     file.write(unified_img)

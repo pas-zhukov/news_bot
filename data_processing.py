@@ -18,6 +18,14 @@ def shorten_text(api_token: str, text: str, symbols_count: int = 600, model: str
     return completion.choices[0].message.content
 
 
+def rephrase_title(api_token: str, title: str, model: str = 'gpt-3.5-turbo'):
+    prompt = f'Перефразируй  название новости про футбол: {title}'
+    openai.api_key = api_token
+    completion = openai.ChatCompletion.create(model=model,
+                                              messages=[{"role": "assistant", "content": prompt}])
+    return completion.choices[0].message.content
+
+
 def unify_image(input_image: BytesIO,
                 _filter: str = '__original__',
                 pixels_num: int = 100,
