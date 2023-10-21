@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as base
+FROM python:3.10.7-slim-buster as base
 LABEL authors="pas-zhukov"
 # This flag is important to output python logs correctly in docker!
 ENV PYTHONUNBUFFERED 1
@@ -10,11 +10,10 @@ CMD ["python3", "bot.py"]
 
 FROM base as dep-pip
 COPY requirements.txt ./
-RUN apt update
-RUN DEBIAN_FRONTEND=noninteractive apt-get -yq install python3 python3-pip python3-dev python3-virtualenv
 RUN pip install -r requirements.txt
 # Chrome dependency Instalation
-RUN apt-get update && apt-get install -y \
+RUN apt-get update
+RUN apt-get install -y \
     fonts-liberation \
     libasound2 \
     libatk-bridge2.0-0 \
@@ -38,8 +37,7 @@ RUN apt-get update && apt-get install -y \
     libu2f-udev \
     libvulkan1 \
     libcurl4
-RUN apt-get update \
-    && apt-get install -y wget \
+RUN apt-get install -y wget \
     && rm -rf /var/lib/apt/lists/*
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ./google-chrome-stable_current_amd64.deb
