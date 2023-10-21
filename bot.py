@@ -5,7 +5,6 @@ import textwrap as tw
 import os
 from pathlib import Path
 
-# import git
 import requests
 import rollbar
 import telebot
@@ -37,12 +36,8 @@ def main():
     logger.setLevel(logging.INFO)
     logger.info('Commence logging.')
 
-    # repo = git.Repo(search_parent_directories=True)
-    # sha = repo.head.object.hexsha
-    sha = 1.0
     rollbar.init(env.str('ROLLBAR_ACCESS_TOKEN', None),
-                 env.str('ROLLBAR_ENV', None),
-                 code_version=sha)
+                 env.str('ROLLBAR_ENV', None),)
     rollbar.report_message('Rollbar is configured correctly!', 'info')
 
     bot = telebot.TeleBot(api_token)
