@@ -68,7 +68,7 @@ def main():
                 response.raise_for_status()
 
                 image = BytesIO(response.content)
-                unique_img = make_img_unique(image, random.choice(FILTERS_LIST), 100, True)
+                unique_img = make_img_unique(image, random.choice(FILTERS_LIST), 100, False)
 
                 post_news(bot, channel_id, rephrased_title, unique_img, shortened_text)
 
