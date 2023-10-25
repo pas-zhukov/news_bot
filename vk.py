@@ -187,7 +187,7 @@ def create_post_on_wall(path: str,
         {text}
         
         Наш Телеграм: https://t.me/wfootbollnews
-        Дзен: https://dzen.ru/user/g5tfpd1fergv2t6394xtgq76qc
+        Дзен: https://dzen.ru/wfootbollnews
         """
 
     comment = tw.dedent(full_text)
