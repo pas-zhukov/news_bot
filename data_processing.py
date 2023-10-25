@@ -19,7 +19,7 @@ def shorten_text(api_token: str, text: str, symbols_count: int = 600, model: str
 
 
 def rephrase_title(api_token: str, title: str, model: str = 'gpt-3.5-turbo'):
-    prompt = f'Перефразируй  название новости про футбол: {title}'
+    prompt = f'Перефразируй  название новости про футбол: {title}. Не используй кавычки при выводе названия.'
     openai.api_key = api_token
     completion = openai.ChatCompletion.create(model=model,
                                               messages=[{"role": "assistant", "content": prompt}])

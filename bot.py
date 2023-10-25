@@ -64,6 +64,7 @@ def main():
                 shortened_text = shorten_text(gpt_token, text)
                 rephrased_title = rephrase_title(gpt_token, title)
                 if len(shortened_text) + len(rephrased_title) + 100 > 1000:
+                    logger.warning(f'Full text length + 100: {len(shortened_text) + len(rephrased_title) + 100}. Regenerate text.')
                     continue
 
                 # loading image

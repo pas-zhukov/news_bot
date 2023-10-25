@@ -68,8 +68,3 @@ def get_img(img_url: str) -> BytesIO:
     response.raise_for_status()
     image = BytesIO(response.content)
     return image
-
-
-if __name__ == '__main__':
-    url = parse_latest_news_url()
-    print(parse_news_page(url))
