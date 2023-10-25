@@ -83,7 +83,7 @@ def main():
                 # post into VK
                 with open(image_path, 'bw+') as file:
                     file.write(unique_img)
-                create_post_on_wall(image_path, title, shortened_text, vk_access_token, vk_group_id)
+                create_post_on_wall(image_path, rephrased_title, shortened_text, vk_access_token, vk_group_id)
 
                 with open(db_path, 'a+', encoding='utf-8') as file:
                     file.write(latest_news_url + '\n')
